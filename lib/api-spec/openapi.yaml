@@ -3,20 +3,36 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: AgroSaathi Agricultural Platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: market
+    description: Crop market prices
+  - name: weather
+    description: Weather data and forecasts
+  - name: notifications
+    description: User notifications
+  - name: ai
+    description: AI assistant
+  - name: schemes
+    description: Government schemes
+  - name: marketplace
+    description: Agricultural marketplace listings
+  - name: profile
+    description: Farmer profile
+  - name: dashboard
+    description: Dashboard summary
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +40,446 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ── Market Prices ───────────────────────────────────────────────────────────
+  /crops/prices:
+    get:
+      operationId: listCropPrices
+      tags: [market]
+      summary: List current crop prices
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+        - in: query
+          name: state
+          schema:
+            type: string
+        - in: query
+          name: search
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of crop prices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CropPrice"
+
+  /crops/prices/summary:
+    get:
+      operationId: getCropPriceSummary
+      tags: [market]
+      summary: Market price summary for dashboard
+      responses:
+        "200":
+          description: Price summary stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CropPriceSummary"
+
+  /crops/{cropId}/price-history:
+    get:
+      operationId: getCropPriceHistory
+      tags: [market]
+      summary: Price history for chart
+      parameters:
+        - in: path
+          name: cropId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Price history data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PriceHistoryPoint"
+
+  # ── Weather ──────────────────────────────────────────────────────────────────
+  /weather/current:
+    get:
+      operationId: getCurrentWeather
+      tags: [weather]
+      summary: Current weather conditions
+      parameters:
+        - in: query
+          name: location
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Current weather
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentWeather"
+
+  /weather/forecast:
+    get:
+      operationId: getWeatherForecast
+      tags: [weather]
+      summary: 7-day weather forecast
+      parameters:
+        - in: query
+          name: location
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Weather forecast
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WeatherForecastDay"
+
+  /weather/alerts:
+    get:
+      operationId: getWeatherAlerts
+      tags: [weather]
+      summary: Active weather alerts
+      responses:
+        "200":
+          description: Weather alerts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WeatherAlert"
+
+  # ── Notifications ────────────────────────────────────────────────────────────
+  /notifications:
+    get:
+      operationId: listNotifications
+      tags: [notifications]
+      summary: List user notifications
+      parameters:
+        - in: query
+          name: unreadOnly
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Notifications list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+
+  /notifications/mark-all-read:
+    post:
+      operationId: markAllNotificationsRead
+      tags: [notifications]
+      summary: Mark all notifications as read
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResult"
+
+  /notifications/{notificationId}/read:
+    patch:
+      operationId: markNotificationRead
+      tags: [notifications]
+      summary: Mark a single notification as read
+      parameters:
+        - in: path
+          name: notificationId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Updated notification
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+
+  # ── AI Assistant ─────────────────────────────────────────────────────────────
+  /ai/conversations:
+    get:
+      operationId: listAiConversations
+      tags: [ai]
+      summary: List AI conversation sessions
+      responses:
+        "200":
+          description: Conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AiConversation"
+
+  /ai/chat:
+    post:
+      operationId: sendAiMessage
+      tags: [ai]
+      summary: Send a message and get AI response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AiMessageInput"
+      responses:
+        "200":
+          description: AI reply
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AiMessage"
+
+  # ── Government Schemes ───────────────────────────────────────────────────────
+  /schemes:
+    get:
+      operationId: listSchemes
+      tags: [schemes]
+      summary: List government schemes
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: state
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Schemes list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GovernmentScheme"
+
+  /schemes/featured:
+    get:
+      operationId: listFeaturedSchemes
+      tags: [schemes]
+      summary: Featured schemes for dashboard
+      responses:
+        "200":
+          description: Featured schemes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GovernmentScheme"
+
+  /schemes/{schemeId}:
+    get:
+      operationId: getScheme
+      tags: [schemes]
+      summary: Get scheme detail
+      parameters:
+        - in: path
+          name: schemeId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Scheme detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GovernmentScheme"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ── Marketplace ──────────────────────────────────────────────────────────────
+  /marketplace/listings:
+    get:
+      operationId: listMarketplaceListings
+      tags: [marketplace]
+      summary: List marketplace listings
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [sell, buy]
+        - in: query
+          name: state
+          schema:
+            type: string
+        - in: query
+          name: search
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Listings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MarketplaceListing"
+
+    post:
+      operationId: createMarketplaceListing
+      tags: [marketplace]
+      summary: Create a new listing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketplaceListingInput"
+      responses:
+        "201":
+          description: Created listing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketplaceListing"
+
+  /marketplace/listings/{listingId}:
+    get:
+      operationId: getMarketplaceListing
+      tags: [marketplace]
+      summary: Get listing detail
+      parameters:
+        - in: path
+          name: listingId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Listing detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketplaceListing"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    patch:
+      operationId: updateMarketplaceListing
+      tags: [marketplace]
+      summary: Update a listing
+      parameters:
+        - in: path
+          name: listingId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketplaceListingUpdate"
+      responses:
+        "200":
+          description: Updated listing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketplaceListing"
+
+    delete:
+      operationId: deleteMarketplaceListing
+      tags: [marketplace]
+      summary: Delete a listing
+      parameters:
+        - in: path
+          name: listingId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResult"
+
+  # ── Profile ──────────────────────────────────────────────────────────────────
+  /profile:
+    get:
+      operationId: getProfile
+      tags: [profile]
+      summary: Get farmer profile
+      responses:
+        "200":
+          description: Profile data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FarmerProfile"
+
+    patch:
+      operationId: updateProfile
+      tags: [profile]
+      summary: Update farmer profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FarmerProfileUpdate"
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FarmerProfile"
+
+  # ── Dashboard ─────────────────────────────────────────────────────────────────
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Dashboard aggregate stats
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
 components:
   schemas:
     HealthStatus:
@@ -31,6 +487,477 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+
+    ActionResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required: [success]
+
+    # ── Market ──────────────────────────────────────────────────────────────────
+    CropPrice:
+      type: object
+      properties:
+        id:
+          type: string
+        cropName:
+          type: string
+        cropNameHindi:
+          type: string
+        category:
+          type: string
+        currentPrice:
+          type: number
+        minPrice:
+          type: number
+        maxPrice:
+          type: number
+        unit:
+          type: string
+        change:
+          type: number
+        changePercent:
+          type: number
+        market:
+          type: string
+        state:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        [id, cropName, cropNameHindi, category, currentPrice, minPrice, maxPrice, unit, change, changePercent, market, state, updatedAt]
+
+    CropPriceSummary:
+      type: object
+      properties:
+        totalCrops:
+          type: integer
+        topGainers:
+          type: array
+          items:
+            $ref: "#/components/schemas/CropPrice"
+        topLosers:
+          type: array
+          items:
+            $ref: "#/components/schemas/CropPrice"
+        averageChange:
+          type: number
+        lastUpdated:
+          type: string
+      required: [totalCrops, topGainers, topLosers, averageChange, lastUpdated]
+
+    PriceHistoryPoint:
+      type: object
+      properties:
+        date:
+          type: string
+        price:
+          type: number
+        minPrice:
+          type: number
+        maxPrice:
+          type: number
+      required: [date, price, minPrice, maxPrice]
+
+    # ── Weather ─────────────────────────────────────────────────────────────────
+    CurrentWeather:
+      type: object
+      properties:
+        location:
+          type: string
+        temperature:
+          type: number
+        feelsLike:
+          type: number
+        humidity:
+          type: integer
+        windSpeed:
+          type: number
+        windDirection:
+          type: string
+        condition:
+          type: string
+        conditionCode:
+          type: string
+        visibility:
+          type: number
+        uvIndex:
+          type: integer
+        soilMoisture:
+          type: ["number", "null"]
+        rainfall:
+          type: number
+        updatedAt:
+          type: string
+      required:
+        [location, temperature, feelsLike, humidity, windSpeed, windDirection, condition, conditionCode, visibility, uvIndex, soilMoisture, rainfall, updatedAt]
+
+    WeatherForecastDay:
+      type: object
+      properties:
+        date:
+          type: string
+        dayOfWeek:
+          type: string
+        high:
+          type: number
+        low:
+          type: number
+        condition:
+          type: string
+        conditionCode:
+          type: string
+        humidity:
+          type: integer
+        rainfall:
+          type: number
+        windSpeed:
+          type: number
+        farmingAdvice:
+          type: string
+      required: [date, dayOfWeek, high, low, condition, conditionCode, humidity, rainfall, windSpeed, farmingAdvice]
+
+    WeatherAlert:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        severity:
+          type: string
+          enum: [info, warning, severe]
+        title:
+          type: string
+        description:
+          type: string
+        validFrom:
+          type: string
+        validUntil:
+          type: string
+        affectedAreas:
+          type: array
+          items:
+            type: string
+      required: [id, type, severity, title, description, validFrom, validUntil, affectedAreas]
+
+    # ── Notifications ────────────────────────────────────────────────────────────
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [price_alert, weather_alert, scheme_update, marketplace, system, advisory]
+        title:
+          type: string
+        message:
+          type: string
+        isRead:
+          type: boolean
+        createdAt:
+          type: string
+        actionUrl:
+          type: ["string", "null"]
+        iconType:
+          type: string
+      required: [id, type, title, message, isRead, createdAt, actionUrl, iconType]
+
+    # ── AI ────────────────────────────────────────────────────────────────────────
+    AiConversation:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        lastMessage:
+          type: string
+        createdAt:
+          type: string
+        messageCount:
+          type: integer
+      required: [id, title, lastMessage, createdAt, messageCount]
+
+    AiMessage:
+      type: object
+      properties:
+        id:
+          type: string
+        conversationId:
+          type: string
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        createdAt:
+          type: string
+        suggestions:
+          type: ["array", "null"]
+          items:
+            type: string
+      required: [id, conversationId, role, content, createdAt, suggestions]
+
+    AiMessageInput:
+      type: object
+      properties:
+        message:
+          type: string
+        conversationId:
+          type: ["string", "null"]
+      required: [message]
+
+    # ── Schemes ──────────────────────────────────────────────────────────────────
+    GovernmentScheme:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        shortDescription:
+          type: string
+        fullDescription:
+          type: string
+        category:
+          type: string
+        ministry:
+          type: string
+        eligibility:
+          type: array
+          items:
+            type: string
+        benefits:
+          type: array
+          items:
+            type: string
+        documents:
+          type: array
+          items:
+            type: string
+        applicationDeadline:
+          type: ["string", "null"]
+        applicationUrl:
+          type: ["string", "null"]
+        isFeatured:
+          type: boolean
+        isActive:
+          type: boolean
+        states:
+          type: array
+          items:
+            type: string
+        maxBenefitAmount:
+          type: ["number", "null"]
+        beneficiaryCount:
+          type: ["integer", "null"]
+      required:
+        [id, title, shortDescription, fullDescription, category, ministry, eligibility, benefits, documents, applicationDeadline, applicationUrl, isFeatured, isActive, states, maxBenefitAmount, beneficiaryCount]
+
+    # ── Marketplace ──────────────────────────────────────────────────────────────
+    MarketplaceListing:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [sell, buy]
+        cropName:
+          type: string
+        category:
+          type: string
+        quantity:
+          type: number
+        unit:
+          type: string
+        pricePerUnit:
+          type: number
+        totalPrice:
+          type: number
+        sellerName:
+          type: string
+        sellerPhone:
+          type: string
+        location:
+          type: string
+        state:
+          type: string
+        description:
+          type: string
+        quality:
+          type: string
+          enum: [A, B, C]
+        isOrganic:
+          type: boolean
+        isNegotiable:
+          type: boolean
+        imageUrl:
+          type: ["string", "null"]
+        postedAt:
+          type: string
+        expiresAt:
+          type: ["string", "null"]
+        isActive:
+          type: boolean
+        viewCount:
+          type: integer
+      required:
+        [id, type, cropName, category, quantity, unit, pricePerUnit, totalPrice, sellerName, sellerPhone, location, state, description, quality, isOrganic, isNegotiable, imageUrl, postedAt, expiresAt, isActive, viewCount]
+
+    MarketplaceListingInput:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [sell, buy]
+        cropName:
+          type: string
+        category:
+          type: string
+        quantity:
+          type: number
+        unit:
+          type: string
+        pricePerUnit:
+          type: number
+        location:
+          type: string
+        state:
+          type: string
+        description:
+          type: string
+        quality:
+          type: string
+          enum: [A, B, C]
+        isOrganic:
+          type: boolean
+        isNegotiable:
+          type: boolean
+      required: [type, cropName, category, quantity, unit, pricePerUnit, location, state, description, quality, isOrganic, isNegotiable]
+
+    MarketplaceListingUpdate:
+      type: object
+      properties:
+        pricePerUnit:
+          type: number
+        quantity:
+          type: number
+        description:
+          type: string
+        isActive:
+          type: boolean
+        isNegotiable:
+          type: boolean
+
+    # ── Profile ──────────────────────────────────────────────────────────────────
+    FarmerProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: ["string", "null"]
+        village:
+          type: string
+        district:
+          type: string
+        state:
+          type: string
+        landHolding:
+          type: number
+        landUnit:
+          type: string
+        primaryCrops:
+          type: array
+          items:
+            type: string
+        irrigationType:
+          type: string
+        soilType:
+          type: string
+        kccHolder:
+          type: boolean
+        pmFasalBimaEnrolled:
+          type: boolean
+        avatarUrl:
+          type: ["string", "null"]
+        joinedAt:
+          type: string
+      required:
+        [id, name, phone, email, village, district, state, landHolding, landUnit, primaryCrops, irrigationType, soilType, kccHolder, pmFasalBimaEnrolled, avatarUrl, joinedAt]
+
+    FarmerProfileUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        village:
+          type: string
+        district:
+          type: string
+        state:
+          type: string
+        landHolding:
+          type: number
+        primaryCrops:
+          type: array
+          items:
+            type: string
+        irrigationType:
+          type: string
+        soilType:
+          type: string
+        kccHolder:
+          type: boolean
+        pmFasalBimaEnrolled:
+          type: boolean
+
+    # ── Dashboard ─────────────────────────────────────────────────────────────────
+    DashboardSummary:
+      type: object
+      properties:
+        farmerName:
+          type: string
+        location:
+          type: string
+        todayWeather:
+          $ref: "#/components/schemas/CurrentWeather"
+        activeListings:
+          type: integer
+        unreadNotifications:
+          type: integer
+        activeSchemes:
+          type: integer
+        topCrops:
+          type: array
+          items:
+            $ref: "#/components/schemas/CropPrice"
+        recentNotifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/Notification"
+        marketTrend:
+          type: string
+          enum: [up, down, stable]
+      required:
+        [farmerName, location, todayWeather, activeListings, unreadNotifications, activeSchemes, topCrops, recentNotifications, marketTrend]
