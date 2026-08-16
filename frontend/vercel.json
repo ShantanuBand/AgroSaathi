@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://agrosaathi-api.onrender.com/api/:path*"
+      "destination": "https://agrosaathi-udm1.onrender.com/api/:path*"
     },
     {
       "source": "/((?!api/)[^.]*)",
