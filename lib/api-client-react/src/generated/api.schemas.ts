@@ -320,15 +320,21 @@ export interface DashboardSummary {
 export type ListCropPricesParams = {
 category?: string;
 state?: string;
+district?: string;
 search?: string;
 };
 
 export type GetCurrentWeatherParams = {
 location?: string;
+district?: string;
+city?: string;
 };
 
 export type GetWeatherForecastParams = {
 location?: string;
+district?: string;
+city?: string;
+query?: string;
 };
 
 export type ListNotificationsParams = {

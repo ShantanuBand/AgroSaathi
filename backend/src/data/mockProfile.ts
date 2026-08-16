@@ -1,0 +1,18 @@
+export const FARMER_PROFILE = {
+  id: "fp1",
+  name: "Ramesh Patil",
+  phone: "9876543210",
+  email: "ramesh.patil@gmail.com",
+  village: "Aundha Nagnath",
+  district: "Hingoli",
+  state: "Maharashtra",
+  landHolding: 4.5,
+  landUnit: "acres",
+  primaryCrops: ["Soybean", "Pigeon Pea", "Wheat"],
+  irrigationType: "Drip + Rainfed",
+  soilType: "Medium Black",
+  kccHolder: true,
+  pmFasalBimaEnrolled: true,
+  avatarUrl: null,
+  joinedAt: "2024-03-15T00:00:00Z",
+};
