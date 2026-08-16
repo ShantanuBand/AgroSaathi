@@ -168,7 +168,7 @@ export default function RegisterPage() {
       <div className="absolute inset-0 bg-black/40 md:bg-black/20 z-0"></div>
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent hidden md:block z-0"></div>
 
-      <div className="relative z-10 w-full mx-auto flex flex-col md:flex-row items-center justify-center md:justify-end gap-5 lg:gap-8 pr-8 sm:pr-12 lg:pr-32 xl:pr-48 pt-10 md:pt-0">
+      <div className="relative z-10 w-full mx-auto flex flex-col md:flex-row items-center justify-center md:justify-end gap-5 lg:gap-8 px-4 sm:px-6 md:px-0 md:pr-12 lg:pr-32 xl:pr-48 pt-10 md:pt-0">
         
         {/* Left Side: Features List (Hidden on Mobile) */}
         <div className="hidden md:flex flex-col max-w-sm">
