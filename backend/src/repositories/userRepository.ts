@@ -1,6 +1,6 @@
-import { db, usersTable, sellerProfilesTable, type User, type InsertUser, type InsertSellerProfile, type SellerProfile } from "@workspace/db";
+import { db, usersTable, type User, type InsertUser } from "@workspace/db";
 import { eq } from "drizzle-orm";
-import { usersStore, sellerProfilesStore, type UserAccount, type MockSellerProfile } from "../data/mockUsers.js";
+import { usersStore, type UserAccount } from "../data/mockUsers.js";
 
 export class UserRepository {
   private isDbConnected(): boolean {
