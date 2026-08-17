@@ -8,6 +8,7 @@ import { apiRateLimiter } from "./middlewares/rateLimiter.js";
 import { env } from "./config/env.js";
 
 export const app = express();
+app.set("trust proxy", 1);
 
 app.use(helmet({
   contentSecurityPolicy: false, // Disabled for flexible dev asset loading
