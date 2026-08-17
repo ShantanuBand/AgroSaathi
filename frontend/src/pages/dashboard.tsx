@@ -313,8 +313,8 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {summary?.latestNews && summary.latestNews.length > 0 ? (
-              summary.latestNews.map((newsItem: any, idx: number) => {
+            {(summary as any)?.latestNews && (summary as any).latestNews.length > 0 ? (
+              (summary as any).latestNews.map((newsItem: any, idx: number) => {
                 const isSky = idx % 3 === 0;
                 const isAmber = idx % 3 === 1;
                 
