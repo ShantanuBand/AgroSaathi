@@ -61,6 +61,22 @@ export function LanguageSwitcher({ variant = 'pill', className = '' }: LanguageS
     );
   }
 
+  if (variant === 'compact') {
+    return (
+      <button
+        type="button"
+        onClick={toggleLanguage}
+        title="Switch Language (मराठी / English)"
+        className={`px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-xs transition-all active:scale-95 cursor-pointer ${className}`}
+      >
+        <Languages className="w-3.5 h-3.5 shrink-0 text-emerald-100" />
+        <span className="tracking-tight font-bold">
+          {language === 'mr' ? 'मराठी' : 'EN'}
+        </span>
+      </button>
+    );
+  }
+
   return (
     <button
       type="button"

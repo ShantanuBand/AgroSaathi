@@ -201,7 +201,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         </Link>
         <div className="flex items-center gap-1.5">
           {/* Mobile Language Switcher */}
-          <LanguageSwitcher variant="pill" className="py-0.5 px-1.5 text-[10px]" />
+          <LanguageSwitcher variant="compact" className="py-1 px-2 text-[10px]" />
           <Link href="/notifications" className="relative p-2 text-muted-foreground hover:text-foreground">
             <Bell className="w-5 h-5" />
             {unreadCount > 0 && (

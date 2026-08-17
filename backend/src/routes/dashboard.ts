@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { getLiveNotifications, getLiveMarketplaceListings, getLiveSchemes } from "../data/mockTime.js";
+import { getLiveNotifications, getLiveMarketplaceListings, getLiveSchemes, readStatusMap } from "../data/mockTime.js";
 import { verifyAccessToken } from "../utils/jwt.js";
 import { userRepository } from "../repositories/userRepository.js";
 import { newsService } from "../services/newsService.js";
@@ -46,7 +46,10 @@ router.get("/dashboard/summary", async (req, res): Promise<void> => {
   const listings = getLiveMarketplaceListings();
   const schemes = getLiveSchemes();
 
-  const unreadNotifications = notifications.filter(n => !n.isRead).length;
+  const unreadNotifications = notifications.filter(n => {
+    const isRead = readStatusMap[n.id] !== undefined ? readStatusMap[n.id] : n.isRead;
+    return !isRead;
+  }).length;
   const activeListings = listings.filter(l => l.isActive).length;
   const activeSchemes = schemes.filter(s => s.isActive).length;
   const recentNotifications = notifications.slice(0, 4);

@@ -1,9 +1,7 @@
 import { Router, type IRouter } from "express";
-import { getLiveNotifications } from "../data/mockTime.js";
+import { getLiveNotifications, readStatusMap } from "../data/mockTime.js";
 
 const router: IRouter = Router();
-
-let readStatusMap: Record<string, boolean> = {};
 
 /** GET /notifications */
 router.get("/notifications", async (req, res): Promise<void> => {

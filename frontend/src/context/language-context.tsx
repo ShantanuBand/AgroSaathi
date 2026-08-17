@@ -18,7 +18,7 @@ function escapeRegExp(str: string): string {
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
-    return (localStorage.getItem(STORAGE_LANG_KEY) as Language) || 'mr'; // Default to Marathi
+    return (localStorage.getItem(STORAGE_LANG_KEY) as Language) || 'en'; // Default to English
   });
 
   const setLanguage = (lang: Language) => {

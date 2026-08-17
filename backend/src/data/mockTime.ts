@@ -8,6 +8,8 @@ import { GOVERNMENT_SCHEMES } from "./mockSchemes.js";
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+export const readStatusMap: Record<string, boolean> = {};
+
 /** Returns dynamic notifications relative to current timestamp */
 export function getLiveNotifications() {
   const now = new Date();
