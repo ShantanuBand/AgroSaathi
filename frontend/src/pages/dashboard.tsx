@@ -77,13 +77,17 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         className="space-y-6"
       >
-        <div 
-          className="relative text-white rounded-2xl p-4 sm:p-6 md:p-8 overflow-hidden shadow-xl bg-cover bg-[position:85%_center] md:bg-right border border-emerald-700/30 flex flex-col justify-between min-h-[160px] sm:min-h-[190px] md:min-h-[220px]"
+        <Link 
+          href="/profile"
+          className="block relative text-white rounded-2xl p-4 sm:p-6 md:p-8 overflow-hidden shadow-xl bg-cover bg-[position:85%_center] md:bg-right border border-emerald-700/30 flex flex-col justify-between min-h-[160px] sm:min-h-[190px] md:min-h-[220px] cursor-pointer hover:shadow-2xl transition-shadow"
           style={{ 
             backgroundImage: `linear-gradient(to right, rgba(8, 48, 28, 0.88) 0%, rgba(8, 48, 28, 0.6) 45%, rgba(0,0,0,0) 75%), url('/images/dashboard_hero_bg.png')` 
           }}
         >
-          <div className="absolute top-4 right-4 z-20 hidden md:block bg-black/10 hover:bg-black/20 rounded-full backdrop-blur-md transition-all">
+          <div 
+            className="absolute top-4 right-4 z-20 hidden md:block bg-black/10 hover:bg-black/20 rounded-full backdrop-blur-md transition-all"
+            onClick={(e) => e.stopPropagation()}
+          >
             <LanguageSwitcher variant="pill" />
           </div>
 
@@ -103,7 +107,7 @@ export default function DashboardPage() {
               <span className="truncate">{userLocation}</span>
             </p>
           </div>
-        </div>
+        </Link>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Link href="/weather" className="bg-sky-50/80 dark:bg-sky-950/30 border border-sky-200/80 dark:border-sky-800/60 rounded-2xl p-4 hover:border-sky-400 transition-all cursor-pointer group shadow-sm">
