@@ -8,4 +8,6 @@
 
 export type GetWeatherForecastParams = {
 location?: string;
+district?: string;
+city?: string;
 };

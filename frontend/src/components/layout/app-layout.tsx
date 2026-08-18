@@ -66,7 +66,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, isAuthenticated, logout } = useAuth();
   const { language, toggleLanguage, t } = useLanguage();
   const isMarathi = language === 'mr';
-  const { data: summary } = useGetDashboardSummary({ query: { queryKey: ['dashboard'] } });
+  const { data: summary } = useGetDashboardSummary({}, { query: { queryKey: ['dashboard'] } });
   const isOnline = useOnlineStatus();
 
   const unreadCount = summary?.unreadNotifications || 0;

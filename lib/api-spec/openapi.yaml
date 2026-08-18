@@ -60,6 +60,10 @@ paths:
           name: search
           schema:
             type: string
+        - in: query
+          name: district
+          schema:
+            type: string
       responses:
         "200":
           description: List of crop prices
@@ -115,6 +119,14 @@ paths:
           name: location
           schema:
             type: string
+        - in: query
+          name: district
+          schema:
+            type: string
+        - in: query
+          name: city
+          schema:
+            type: string
       responses:
         "200":
           description: Current weather
@@ -131,6 +143,14 @@ paths:
       parameters:
         - in: query
           name: location
+          schema:
+            type: string
+        - in: query
+          name: district
+          schema:
+            type: string
+        - in: query
+          name: city
           schema:
             type: string
       responses:
@@ -472,6 +492,17 @@ paths:
       operationId: getDashboardSummary
       tags: [dashboard]
       summary: Dashboard aggregate stats
+      parameters:
+        - name: district
+          in: query
+          schema:
+            type: string
+          required: false
+        - name: city
+          in: query
+          schema:
+            type: string
+          required: false
       responses:
         "200":
           description: Dashboard summary

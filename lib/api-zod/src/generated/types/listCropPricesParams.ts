@@ -10,4 +10,5 @@ export type ListCropPricesParams = {
 category?: string;
 state?: string;
 search?: string;
+district?: string;
 };

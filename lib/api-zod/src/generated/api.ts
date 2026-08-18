@@ -22,7 +22,8 @@ export const HealthCheckResponse = zod.object({
 export const ListCropPricesQueryParams = zod.object({
   "category": zod.coerce.string().optional(),
   "state": zod.coerce.string().optional(),
-  "search": zod.coerce.string().optional()
+  "search": zod.coerce.string().optional(),
+  "district": zod.coerce.string().optional()
 })
 
 export const ListCropPricesResponseItem = zod.object({
@@ -103,7 +104,9 @@ export const GetCropPriceHistoryResponse = zod.array(GetCropPriceHistoryResponse
  * @summary Current weather conditions
  */
 export const GetCurrentWeatherQueryParams = zod.object({
-  "location": zod.coerce.string().optional()
+  "location": zod.coerce.string().optional(),
+  "district": zod.coerce.string().optional(),
+  "city": zod.coerce.string().optional()
 })
 
 export const GetCurrentWeatherResponse = zod.object({
@@ -127,7 +130,9 @@ export const GetCurrentWeatherResponse = zod.object({
  * @summary 7-day weather forecast
  */
 export const GetWeatherForecastQueryParams = zod.object({
-  "location": zod.coerce.string().optional()
+  "location": zod.coerce.string().optional(),
+  "district": zod.coerce.string().optional(),
+  "city": zod.coerce.string().optional()
 })
 
 export const GetWeatherForecastResponseItem = zod.object({
@@ -548,6 +553,11 @@ export const UpdateProfileResponse = zod.object({
 /**
  * @summary Dashboard aggregate stats
  */
+export const GetDashboardSummaryQueryParams = zod.object({
+  "district": zod.coerce.string().optional(),
+  "city": zod.coerce.string().optional()
+})
+
 export const GetDashboardSummaryResponse = zod.object({
   "farmerName": zod.string(),
   "location": zod.string(),

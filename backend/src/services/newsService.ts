@@ -59,16 +59,17 @@ export class NewsService {
 
   async getNews(query: { category?: string; search?: string; district?: string }) {
     const { category, search, district } = query;
-    const cacheKey = 'live_news_rss';
+    const districtQuery = district && district !== 'All' ? district : 'Maharashtra';
+    const cacheKey = `live_news_rss_${districtQuery}`;
 
     let newsItems: NewsItem[] = newsCache.get(cacheKey) || [];
 
     if (newsItems.length === 0) {
       try {
-        const fetchPromises = this.rssFeeds.map(async (feedUrl) => {
-          const feed = await parser.parseURL(feedUrl);
-          return feed.items;
-        });
+        const feedUrl = `https://news.google.com/rss/search?q=agriculture+${encodeURIComponent(districtQuery)}+OR+farmer+${encodeURIComponent(districtQuery)}&hl=en-IN&gl=IN&ceid=IN:en`;
+        const fetchPromises = [
+          parser.parseURL(feedUrl).then(feed => feed.items)
+        ];
 
         const results = await Promise.allSettled(fetchPromises);
         let allItems: any[] = [];
@@ -107,7 +108,7 @@ export class NewsService {
               title: item.title || 'Agricultural News',
               summary: item.contentSnippet?.slice(0, 150) + '...' || item.description?.slice(0, 150) + '...' || 'Read more for details.',
               category: itemCat,
-              district: "Maharashtra", // Google News might not specify district easily, fallback to state level
+              district: districtQuery,
               source: item.source || item.creator || 'Google News',
               time: item.pubDate ? new Date(item.pubDate).toLocaleDateString('en-IN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' }) : "Just Now",
               icon: itemIcon,
@@ -141,16 +142,6 @@ export class NewsService {
         n.title.toLowerCase().includes(q) || 
         n.summary.toLowerCase().includes(q)
       );
-    }
-
-    if (district && district !== 'All') {
-        const d = district.toLowerCase();
-        // Just boost matches or show all since it's hard to get district specific news from general RSS
-        // but we'll filter if district explicitly matches
-        const districtSpecific = filtered.filter(n => n.title.toLowerCase().includes(d) || n.summary.toLowerCase().includes(d));
-        if(districtSpecific.length > 0) {
-            filtered = districtSpecific;
-        }
     }
 
     return filtered;

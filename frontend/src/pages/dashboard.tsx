@@ -31,14 +31,17 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const { language, t } = useLanguage();
   const { selectedDistrict, selectedCity } = useLocationContext();
-  const { data: summary, isLoading } = useGetDashboardSummary({ 
-    query: { 
-      queryKey: ['dashboard'],
-      retry: 2,
-      refetchInterval: 15000, // Real-time 15s live update polling
-      refetchOnMount: 'always',
-    } 
-  });
+  const { data: summary, isLoading } = useGetDashboardSummary(
+    { district: selectedDistrict, city: selectedCity },
+    { 
+      query: { 
+        queryKey: ['dashboard', selectedDistrict, selectedCity],
+        retry: 2,
+        refetchInterval: 15000, // Real-time 15s live update polling
+        refetchOnMount: 'always',
+      }
+    }
+  );
 
   if (isLoading) {
     return (

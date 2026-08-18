@@ -31,6 +31,12 @@ router.get("/dashboard/summary", async (req, res): Promise<void> => {
     }
   }
 
+  const reqDistrict = req.query.district as string;
+  const reqCity = req.query.city as string;
+
+  if (reqDistrict && reqDistrict !== 'All') district = reqDistrict;
+  if (reqCity && reqCity !== 'All') city = reqCity;
+
   // Fetch real-time data in parallel
   const [news, weather, marketData] = await Promise.all([
     newsService.getNews({ district }),

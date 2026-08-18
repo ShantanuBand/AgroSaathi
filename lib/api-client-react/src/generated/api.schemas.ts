@@ -320,8 +320,8 @@ export interface DashboardSummary {
 export type ListCropPricesParams = {
 category?: string;
 state?: string;
-district?: string;
 search?: string;
+district?: string;
 };
 
 export type GetCurrentWeatherParams = {
@@ -334,7 +334,6 @@ export type GetWeatherForecastParams = {
 location?: string;
 district?: string;
 city?: string;
-query?: string;
 };
 
 export type ListNotificationsParams = {
@@ -361,4 +360,9 @@ export const ListMarketplaceListingsType = {
   sell: 'sell',
   buy: 'buy',
 } as const;
+
+export type GetDashboardSummaryParams = {
+district?: string;
+city?: string;
+};
 

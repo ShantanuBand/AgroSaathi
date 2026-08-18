@@ -20,6 +20,7 @@ export * from './errorResponse';
 export * from './farmerProfile';
 export * from './farmerProfileUpdate';
 export * from './getCurrentWeatherParams';
+export * from './getDashboardSummaryParams';
 export * from './getWeatherForecastParams';
 export * from './governmentScheme';
 export * from './healthStatus';
